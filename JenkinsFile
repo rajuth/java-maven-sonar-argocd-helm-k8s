@@ -1,7 +1,6 @@
 pipeline {
  environment {
-         //DOCKER_USER='rajuthtoa'
-         //DOCKER_PASS='Rajuvani@143'
+
         DOCKER_IMAGE = "rajuthtoa/ultimate-cicd:${BUILD_NUMBER}"
         //DOCKER_IMAGE = "rajuthtoa/ultimate-cicd:8"
         // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
@@ -60,8 +59,7 @@ pipeline {
       }
       		stage('Login && push image') {
       	environment {
-         //DOCKER_USER='rajuthtoa'
-         //DOCKER_PASS='Rajuvani@143'
+  
         DOCKER_IMAGE = "rajuthtoa/ultimate-cicd:${BUILD_NUMBER}"
         //DOCKER_IMAGE = "rajuthtoa/ultimate-cicd:8"
         // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
