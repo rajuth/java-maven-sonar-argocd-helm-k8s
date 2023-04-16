@@ -2,9 +2,10 @@ pipeline {
  environment {
 
         DOCKER_IMAGE = "rajuthtoa/ultimate-cicd:${BUILD_NUMBER}"
-        //DOCKER_IMAGE = "rajuthtoa/ultimate-cicd:8"
         // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
         DOCKERHUB_CREDENTIALS = credentials('docker-id')
+	GIT_REPO_NAME = "java-maven-sonar-argocd-helm-k8s"
+        GIT_USER_NAME = "rajuth"
       }
   agent {
     docker {
@@ -41,13 +42,7 @@ pipeline {
      // }
     //}
         stage('Build Image') {
-            
-      environment {
-
-        DOCKER_IMAGE = "rajuthtoa/ultimate-cicd:${BUILD_NUMBER}"
-
-      }
-
+           
       steps {
 
         script {
@@ -59,13 +54,7 @@ pipeline {
         }
       }
       		stage('Login && push image') {
-      	environment {
 
-        DOCKER_IMAGE = "rajuthtoa/ultimate-cicd:${BUILD_NUMBER}"
-        //DOCKER_IMAGE = "rajuthtoa/ultimate-cicd:8"
-        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
-        DOCKERHUB_CREDENTIALS = credentials('docker-id')
-      }
 
 			steps {
 				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin && docker push ${DOCKER_IMAGE}'
@@ -77,10 +66,7 @@ pipeline {
 		    }
 		}
 		 stage('Update Deployment File') {
-        environment {
-            GIT_REPO_NAME = "java-maven-sonar-argocd-helm-k8s"
-            GIT_USER_NAME = "rajuth"
-        }
+
         steps {
             withCredentials([string(credentialsId: 'git-id', variable: 'GITHUB_TOKEN')]) {
                 sh '''
