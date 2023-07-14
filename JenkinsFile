@@ -31,25 +31,25 @@ pipeline {
         sh 'cd spring-boot-app && mvn clean package'
       }
     }
-      //  stage('Static Code Analysis') {
-      //environment {
-    //    SONAR_URL = "http://192.168.56.113:9000"
-     // }
-      //steps {
-    //    withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-     //     sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
-      //  }
-     // }
-    //}
+       stage('Static Code Analysis') {
+      environment {
+       SONAR_URL = "http://192.168.56.113:9000"
+      }
+      steps {
+        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+          sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+        }
+      }
+    }
         stage('Build Image') {
            
       steps {
 
         script {
             sh 'cd spring-boot-app && docker build -t ${DOCKER_IMAGE} . '
-            //def dockerImage = docker.image("${DOCKER_IMAGE}")
-            //docker.withRegistry('https://hub.docker.com', "docker-id") {
-            //    dockerImage.push()
+            def dockerImage = docker.image("${DOCKER_IMAGE}")
+            docker.withRegistry('https://hub.docker.com', "docker-id") {
+                dockerImage.push()
             }
         }
       }
